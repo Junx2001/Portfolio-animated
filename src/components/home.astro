@@ -24,6 +24,7 @@ import { Image } from "astro:assets";
       </div>
         <h1
           class="text-[var(--white)] text-5xl md:text-6xl font-medium text-pretty leading-none"
+          id="hero-title"
         >
           Senior Software Engineer
         </h1>
@@ -108,7 +109,54 @@ import { Image } from "astro:assets";
   </div>
 </section>
 
+<script>
+  import anime from 'animejs';
+
+  function initAnimeTextAnimation() {
+    const titleElement = document.getElementById('hero-title');
+    if (!titleElement) return;
+
+    const text = titleElement.textContent || '';
+    titleElement.innerHTML = '';
+    
+    // Split text into individual characters and wrap in spans
+    text.split('').forEach((char) => {
+      const span = document.createElement('span');
+      span.textContent = char === ' ' ? '\u00A0' : char;
+      span.style.display = 'inline-block';
+      span.classList.add('letter');
+      titleElement.appendChild(span);
+    });
+
+    // Anime.js blur reveal animation
+    anime.timeline({ loop: false })
+      .add({
+        targets: '#hero-title .letter',
+        opacity: [0, 1],
+        translateY: [30, 0],
+        filter: ['blur(10px)', 'blur(0px)'],
+        easing: 'easeOutExpo',
+        duration: 1000,
+        delay: (el, i) => 40 * i
+      });
+  }
+
+  // Initialize on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAnimeTextAnimation);
+  } else {
+    initAnimeTextAnimation();
+  }
+</script>
+
 <style is:global>
+  /* Prevent flash of unstyled text - blur reveal ready */
+  #hero-title .letter {
+    display: inline-block;
+    opacity: 0;
+    filter: blur(10px);
+  }
+
   .shiny-sec {
     background: linear-gradient(135deg, #7FB069 25%, #eee5ff 50%, #7FB069 75%);
     background-size: 400% 100%;
