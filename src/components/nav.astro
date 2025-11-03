@@ -38,12 +38,13 @@ const navItems: NavItem[] = [
             <li class="flex-1 md:flex-none">
               <a
                 href={item.href}
-                class="flex flex-col items-center gap-1 text-[var(--white-icon)] transition-colors text-xs md:text-base relative group"
+                class="flex flex-col md:flex-row items-center gap-1 md:gap-2 text-[var(--white-icon)] transition-colors text-xs md:text-base relative group"
               >
                 <div class="absolute -left-6 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full transition-all duration-300 scale-0 opacity-0 bg-[#A9FF5B] nav-indicator hidden md:block" />
-                <span class="md:hidden flex items-center justify-center w-6 h-6">
-                  <fragment set:html={item.icon} />
-                </span>
+                <!-- Icon on desktop -->
+                <span class="hidden md:inline-flex items-center justify-center w-5 h-5" aria-hidden="true" set:html={item.icon} />
+                <!-- Icon on mobile -->
+                <span class="md:hidden flex items-center justify-center w-6 h-6" aria-hidden="true" set:html={item.icon} />
                 <span class="hidden md:inline-block">{item.label}</span>
                 <span class="md:hidden">{item.label}</span>
               </a>
