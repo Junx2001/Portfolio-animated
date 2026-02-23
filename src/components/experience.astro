@@ -1,0 +1,186 @@
+---
+interface Experience {
+  company: string;
+  role: string;
+  start: string; // YYYY-MM
+  end: string; // YYYY-MM or "Present"
+  location: string;
+  type: string; // Full-time, Contract, etc.
+  summary?: string;
+  impacts: string[];
+  tools: string[];
+  stack: string[];
+  link?: string;
+}
+
+const monthDiff = (start: string, end: string) => {
+  const [sy, sm] = start.split("-").map(Number);
+  const endDate = end === "Present" ? new Date() : new Date(Number(end.split("-")[0]), Number(end.split("-")[1]) - 1, 1);
+  const startDate = new Date(sy, sm - 1, 1);
+  let months = (endDate.getFullYear() - startDate.getFullYear()) * 12;
+  months += endDate.getMonth() - startDate.getMonth();
+  if (months < 0) months = 0;
+  const years = Math.floor(months / 12);
+  const remMonths = months % 12;
+  const parts: string[] = [];
+  if (years > 0) parts.push(`${years} yr${years > 1 ? "s" : ""}`);
+  if (remMonths > 0) parts.push(`${remMonths} mo${remMonths > 1 ? "s" : ""}`);
+  return parts.join(" ") || "< 1 mo";
+};
+
+const formatRange = (start: string, end: string) => {
+  const [sy, sm] = start.split("-").map(Number);
+  const startLabel = new Date(sy, sm - 1, 1).toLocaleString("en-US", { month: "short", year: "numeric" });
+  const endLabel = end === "Present" ? "Present" : new Date(Number(end.split("-")[0]), Number(end.split("-")[1]) - 1, 1).toLocaleString("en-US", { month: "short", year: "numeric" });
+  return `${startLabel} — ${endLabel}`;
+};
+
+const experiences: Experience[] = [
+  {
+    company: "Baobab Banque",
+    role: "Senior Software Engineer, CI/CD Engineer",
+    start: "2025-02",
+    end: "Present",
+    location: "Antananarivo, Madagascar",
+    type: "Full-time",
+    summary: "Developed REST API Python/Node.js services and Java microservices with Spring Boot, integrating with MessageQueues and securing APIs (auth, rate limiting, validation). Automating UAT testing and architecting software microservices focused on efficiency, performance, and maintainability for the Bank.",
+    impacts: [
+      "Developed REST API Python/Node.js services and Java microservices with Spring Boot, integrating with MessageQueues and securing APIs (auth, rate limiting, validation).",
+      "Review code, enforce coding standards, and support junior developers through pair programming and technical guidance.",
+      "Automate UAT testing to ensure quality before production release.",
+      "Design and develop software architectures and products focused on efficiency, performance, and maintainability for the Bank.",
+      "Architecting software with microservices design to isolate applications and offer more scalability and software maintainability.",
+    ],
+    tools: ["Python", "JavaScript", "TypeScript", "Java", "Spring Boot", "Angular", "React", "Node.JS"],
+    stack: ["Kubernetes", "Docker", "Argo CD", "Jenkins", "AWS Elastic Container Registry", "Ansible", "Terraform", "SonarQube"],
+  },
+  {
+    company: "Nexthope",
+    role: "Software Engineer",
+    start: "2022-12",
+    end: "2025-01",
+    location: "Antananarivo, Madagascar",
+    type: "Full-time",
+    summary: "Built and optimized REST APIs handling 300+ TPS, improved database performance, and developed Moozik for Artist—a royalties analytics system using GCP ETL and PySpark.",
+    impacts: [
+      "Built and optimized REST APIs (GET, POST, PUT, PATCH, DELETE); implemented a queue system handling 300+ TPS; integrated Firebase notifications.",
+      "Improved SQL and NoSQL performance (indexing, query rewriting, slow query analysis).",
+      "Maintained PostgreSQL and MongoDB with performance tuning (AUTOVACUUM, B-tree indexing, etc.).",
+      "Leveraged AWS (EC2, RDS, S3, IAM) for performance and cost optimization.",
+      "Developed Moozik for Artist, a royalties and analytics system using GCP ETL, LMR, and PySpark.",
+    ],
+    tools: ["Python", "Laravel", "Angular JS", "PostgreSQL", "MongoDB", "Redis", "AWS"],
+    stack: ["Git", "Jrealis", "Postman", "Docker", "Figma", "Adobe XD", "Scrum"],
+  },
+  {
+    company: "Nexthope",
+    role: "Intern Software Engineer",
+    start: "2022-02",
+    end: "2022-11",
+    location: "Antananarivo, Madagascar",
+    type: "Internship",
+    summary: "Contributed to the first ticketing platform for event seat and ticket management. Designed and developed the Point of Sale (POS) module to streamline sales across multiple vendors. Implemented seat management to prevent double booking and concurrency issues.",
+    impacts: [
+      "Contributed to the first ticketing platform for event seat and ticket management.",
+      "Designed and developed the Point of Sale (POS) module to streamline sales across multiple vendors.",
+      "Implemented seat management to prevent double booking and concurrency issues.",
+    ],
+    tools: ["Laravel", "Node.JS", "PostgreSQL", "MongoDB", "Redis", "AWS"],
+    stack: ["Git", "Jrealis", "Postman", "Docker", "Figma", "Adobe XD", "Scrum"],
+  },
+];
+
+const computed = experiences.map((e) => ({
+  ...e,
+  duration: monthDiff(e.start, e.end),
+  range: formatRange(e.start, e.end),
+}));
+---
+
+<section id="experience" class="py-12 border-t border-[#ffffff10] text-[var(--white)]">
+  <div class="max-w-5xl mx-auto">
+    <h2 class="text-lg text-[var(--sec)] mb-2 shiny-sec">My work</h2>
+    <h3 class="text-4xl md:text-5xl font-medium mb-8">Experiences</h3>
+
+    <div class="space-y-6">
+      {computed.map((item, idx) => (
+        <article class="relative group bg-[#1414149c] border border-[var(--white-icon-tr)] rounded-2xl overflow-hidden">
+          <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[var(--sec)]/60 to-transparent opacity-70"></div>
+
+          <div class="p-5 md:p-6">
+            <header class="flex flex-col md:flex-row md:items-start gap-3 md:gap-4">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="flex-shrink-0 w-9 h-9 rounded-xl bg-white/5 border border-[var(--white-icon-tr)] grid place-items-center text-[var(--sec)]">
+                  <!-- briefcase icon -->
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                    <path d="M9 3h6a2 2 0 0 1 2 2v1h3a1 1 0 0 1 1 1v4h-3v-2H6v2H3V7a1 1 0 0 1 1-1h3V5a2 2 0 0 1 2-2zm6 3V5H9v1h6z"></path>
+                    <path d="M3 11h3v2h12v-2h3v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6z"></path>
+                  </svg>
+                </div>
+                <div class="min-w-0">
+                  <h4 class="text-xl md:text-2xl font-semibold truncate">{item.role} <span class="text-[var(--white-icon)] font-normal">@ {item.company}</span></h4>
+                  <div class="flex flex-wrap items-center gap-2 text-[12px] text-[var(--white-icon)] mt-1">
+                    <div class="px-2 py-1 rounded-full border border-[var(--white-icon-tr)] bg-white/5">
+                      {item.range}
+                    </div>
+                    <div class="px-2 py-1 rounded-full border border-[var(--white-icon-tr)] bg-white/5">
+                      {item.duration}
+                    </div>
+                    <div class="px-2 py-1 rounded-full border border-[var(--white-icon-tr)] bg-white/5">
+                      {item.location}
+                    </div>
+                    <div class="px-2 py-1 rounded-full border border-[var(--white-icon-tr)] bg-white/5">
+                      {item.type}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {item.link && (
+                <a href={item.link} target="_blank" rel="noopener" class="ml-auto md:ml-0 inline-flex items-center gap-2 text-[var(--white)] text-sm hover:text-white/90 border border-[var(--white-icon-tr)] bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-lg transition-colors">
+                  <span>Company</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                    <path d="M16.0037 9.41421L7.39712 18.0208L5.98291 16.6066L14.5895 8H7.00373V6H18.0037V17H16.0037V9.41421Z" />
+                  </svg>
+                </a>
+              )}
+            </header>
+
+            {item.summary && (
+              <p class="text-[var(--white-icon)] text-sm md:text-[15px] mt-3">
+                {item.summary}
+              </p>
+            )}
+
+            <div class="mt-4 grid md:grid-cols-2 gap-4">
+              <div>
+                <div class="text-[12px] uppercase tracking-wide text-[var(--white-icon)]/80 mb-2">Impact</div>
+                <ul class="space-y-2 text-[var(--white-icon)] text-[13px] md:text-[14px]">
+                  {item.impacts.map((i) => (
+                    <li class="flex items-start gap-2">
+                      <span class="mt-[3px] text-[var(--sec)]">●</span>
+                      <span>{i}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <div class="text-[12px] uppercase tracking-wide text-[var(--white-icon)]/80 mb-2">Tools & Stack</div>
+                <div class="flex flex-wrap gap-2">
+                  {item.tools.map((t) => (
+                    <span class="px-2.5 py-1 rounded-full border border-[var(--white-icon-tr)] text-[12px] text-[var(--white)] bg-white/5">{t}</span>
+                  ))}
+                </div>
+                <div class="flex flex-wrap gap-2 mt-2">
+                  {item.stack.map((s) => (
+                    <span class="px-2.5 py-1 rounded-full border border-[var(--white-icon-tr)] text-[12px] text-[var(--white)] bg-white/5">{s}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
